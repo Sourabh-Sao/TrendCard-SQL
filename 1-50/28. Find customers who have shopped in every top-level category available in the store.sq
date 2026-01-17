@@ -1,0 +1,19 @@
+
+
+select cu.first_name,COUNT(DISTINCT c2.name) as category_cnt
+from categories c1
+join categories c2
+on c1.parent_category_id=c2.category_id
+join products p
+on p.category_id=c1.category_id
+join order_items ot
+on ot.product_id=p.product_id
+join orders o
+on o.order_id=ot.order_id
+join customers cu
+on cu.customer_id=o.customer_id
+where o.status='Completed' and c2.parent_category_id is null
+GROUP BY 1
+having COUNT(DISTINCT c2.name) = (select COUNT(*)
+from categories
+where parent_category_id is NULL)
