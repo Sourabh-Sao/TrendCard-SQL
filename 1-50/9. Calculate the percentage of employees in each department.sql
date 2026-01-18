@@ -8,3 +8,13 @@ ROUND((COUNT(CASE WHEN department='Technology' THEN 1  END )/COUNT(*))*100.0,1) 
 ROUND((COUNT(CASE WHEN department='Operations' THEN 1  END )/COUNT(*))*100.0,1) as Operations,
 ROUND((COUNT(CASE WHEN department='Finance' THEN 1  END )/COUNT(*))*100.0,1) as Finance
 from employees;
+
+-- Someone commented a new, cleaner and perfect approach for this on LinkedIn
+-- here's the solution 
+-- it will automatically calculate the percentage fo newly added department, in above solution we have to manually add department in case, this is automatic 
+
+select department,
+ROUND(COUNT(*)*100/SUM(COUNT(*)) OVER(),1) as pct
+from employees
+GROUP BY department
+ORDER BY department;
